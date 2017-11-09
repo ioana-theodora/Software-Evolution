@@ -8,6 +8,7 @@ public int countTotalLines(list[str] file){
 	return size(file);
 }
 
+
 public int countTotalLinesProject(list[loc] project){
 	
 	lines = 0;
@@ -28,6 +29,7 @@ public int countBlankLines(list[str] file){
 	return count;
 
 }
+
 
 public int countBlankLinesProject(list[loc] project){
 
@@ -74,4 +76,6 @@ public int countCodeLinesProject(list[loc] project){
 	
 	return lines;
 }
+
+
 
