@@ -10,6 +10,7 @@ public void visualizeResults(str vol, str complexity, str unitSize, str dupl){
 	row3 = [box(text("Unit Size")), box(text("<unitSize>"))];
 	row4 = [box(text("Duplication")), box(text("<dupl>"))];
 	
+	
 	render(grid([row1, row2, row3, row4]));
 
 }
