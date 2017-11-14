@@ -20,6 +20,19 @@ public list[loc] returnListFiles(loc project){
 	
 }
 
+public list[str] projectLines (loc project){
+	list[str] result = [];
+	list[loc] files = returnListFiles(project);
+	
+	for(f <- files){
+		result = result + readFileLines(f);
+	
+	}
+	
+	return result;
+
+}
+
 public list[loc] returnListUnits(loc project){
 	
 	model = createM3FromEclipseProject(project);
