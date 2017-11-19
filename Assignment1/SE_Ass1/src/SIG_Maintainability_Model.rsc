@@ -6,10 +6,18 @@ import Read;
 import Count;
 import Duplication;
 
+
 public void volume(loc project){
 
 	list[loc] files = returnListFiles(project);
 	int linesOfCode = countCodeLinesProject(files);
+	total = countTotalLinesProject(files);
+	blanks = countBlankLinesProject(files);
+	comments = countCommentLinesProject(files);
+	println("Total: <total>");
+	println("Blank: <blanks>");
+	println("Comments: <comments>");
+	println("LOC: <linesOfCode>");
 	result = (linesOfCode/1000);
 	str final = "";
 	
@@ -32,14 +40,17 @@ public void volume(loc project){
 
 }
 
+
+
 public void duplication(loc project){
 
 	list[loc] files = returnListFiles(project);
 	int linesOfCode = countCodeLinesProject(files);
-	list[str] lines = removeBlankCommentLines(projectLines(project));
-	list[list[str]] blocks = possibleBlocks(lines);
-	int duplicates = countDuplicates(blocks);
-	real result = ((duplicates * 12.0)/linesOfCode)*100;
+	list[str] lines = cleanLines(projectLines(project));
+	list[int] duplicates = countDuplicates(lines);
+	println("Duplicates: <duplicates[0]>");
+	println("Lines: <duplicates[1]>");
+	real result = (duplicates[1]*1.0/linesOfCode)*100;
 	str final = "";
 	
 	if(result >= 0 && result < 3)

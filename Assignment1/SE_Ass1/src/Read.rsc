@@ -16,7 +16,8 @@ public list[str] readFileIntoArray(loc file){
 }
 
 public list[loc] returnListFiles(loc project){
-	return toList(visibleFiles(project));
+	model = createM3FromEclipseProject(project);
+	return toList(files(model));
 	
 }
 
