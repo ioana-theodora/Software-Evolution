@@ -191,7 +191,7 @@ public int testability(int complexunit, int unitsize){
 	return result;
 }
 
-public int complexity(){
+/*public int complexity(){ //TODO: DELETE
 	list[int] complexityProject = [0,0,0,0];
 	//Init - start
 	println("Constructing the model");
@@ -204,18 +204,18 @@ public int complexity(){
 	println("Constructing the ASTs");
 	ASTs = {createAstFromFile(filename, true, javaVersion="1.7") | filename <- javaFiles};
 	println("---Done---");
-	//Init - end
+	Init - end
 	
-	//-Delete after testing start
-	ast = createAstFromFile(|java+compilationUnit:///src/smallsql/database/SSStatement.java|, true, javaVersion="1.7");
-	text(ast);
-	methodsAST = { m | /Declaration m := ast, m is method /*|| m is constructor || m is initializer*/};
+	Delete after testing start
+	ast = createAstFromFile(|java+compilationUnit:///src/smallsql/database/TableView.java|, true, javaVersion="1.7");
+	//text(ast);
+	methodsAST = { m | /Declaration m := ast, m is method || m is constructor || m is initializer};
 	println(size(methodsAST));
 	a = unitCyclomaticComplexity(methodsAST);
 	println(a);
-	//-Delte after testing end
+	-Delte after testing end
 	
-	/*int counter = 0;
+	int counter = 0;
 	for(ast <- ASTs){
 		//counter += 1;
 		println("Getting the methods");
@@ -227,7 +227,18 @@ public int complexity(){
 			complexityProject[i] = holder1[i] + holder2[i]; 
 		}
 		println(complexityProject);
-	}*/
+	}
+	return 1;
+}*/
+
+public int complexity(){
+	astsProject = createAstsFromEclipseProject(|project://smallsql0.21_src|, true);
+	text(astsProject);
+	methodsAst = { m | /Declaration m := astsProject, m is method};
+	text(methodsAst);
+	println(size(methodsAst));
+	a = unitCyclomaticComplexity(methodsAst);
+	println(a);
 	return 1;
 }
 
@@ -256,5 +267,4 @@ public void main(/*loc project*/){
 	
 	println("Maintainability: <result>");*/
 	complexity();
-	
 }

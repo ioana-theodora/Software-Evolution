@@ -11,25 +11,16 @@ import lang::java::jdt::m3::Core;
 import lang::java::jdt::m3::AST;
 import util::ValueUI;
 import Exception;
+import Type;
 //--------------------------------
 
 
-public list[int] unitCyclomaticComplexity(set[Declaration] methodsInFile){
-	/*int complexityCounterLow = 0;
-	int complexityCounterModerate = 0;
-	int complexityCounterHigh = 0;
-	int complexityCounterVeryHigh = 0;*/
-	//--------------------------------
-	/*int locLow = 0;
-	int locModerate = 0;
-	int locHigh = 0;
-	int locVeryHigh = 0;*/
-	//-------------------------------
+public list[int] unitCyclomaticComplexity(set[Declaration] methodsInProject){
 	list[int] calculatedRiskFile = [0, 0, 0, 0];
 	int counter = 0;
-	for(methodAST <- methodsInFile){
+	for(methodAST <- methodsInProject){
 		counter += 1;
-		text(methodAST);
+		//text(methodAST);//text each method for check
 		int complexity = 1; //always starts with 1
 		loc methodLocation;
 		println("Analysing method");
@@ -51,42 +42,45 @@ public list[int] unitCyclomaticComplexity(set[Declaration] methodsInFile){
 			case \catch(_,_) : complexity += 1;
 			case \conditional(_,_,_) : complexity += 1; //x?y:z
 			case \infix(_,/(\B&&\B|\B\|\|\B)/,_) : complexity += 1; //match only full non-words && and ||
-			//case \method(x,_,_,_,_):text(x);
-			case \method(x,_,_,_) : methodLocation = x;//why error? it works...
+		}
+		methodINmethod = { m | /TypeSymbol  m := methodAST, m is method};
+		//println(methodINmethod);
+		for(m <- methodINmethod){
+			//println(m);
+			visit(m){
+				case \method(x,_,_,_): methodLocation = x;
+			}
 		}
 		println("---Done---");
-		//println("Complexity: <complexity>");
 		println(methodLocation);
+		//Take out of comment after problem solved
 		holder1 = calculatedRiskFile;
 		holder2 = riskEvaluation(complexity, methodLocation, 0, 0, 0, 0);
-		for(int i <- [0..size(holder1)-1]){
+		for(int i <- [0..size(holder1)]){
 			calculatedRiskFile[i] = holder1[i]+holder2[i];
 		}
-		//calculatedRiskFile += riskEvaluation(complexity, methodLocation, 0, 0, 0, 0);
 		println(calculatedRiskFile);
 	}
-	return calculatedRiskFile;
+	//return calculatedRiskFile;
+	return [1];
 }
 
 public list[int] riskEvaluation(int complexityPerUnit, loc methodToEvaluate, int locLow, int locModerate, int locHigh, int locVeryHigh){
+	println(complexityPerUnit);
 	if(complexityPerUnit >= 1 && complexityPerUnit <= 10){
 		println("Low risk");
-		//complexityCounterLow += 1;
 		locLow += methodLOC(methodToEvaluate);
 	}
 	if(complexityPerUnit >= 11 && complexityPerUnit <= 20){
 		println("Moderate risk");
-		//complexityCounterModerate += 1;
 		locModerate += methodLOC(methodToEvaluate);
 	}
 	if(complexityPerUnit >= 21 && complexityPerUnit <= 50){
 		println("High risk");
-		//complexityCounterHigh += 1;
 		locHigh += methodLOC(methodToEvaluate);
 	}
 	if(complexityPerUnit >= 51){
 		println("Very high risk");
-		//complexityCounterVeryHigh += 1;
 		locVeryHigh += methodLOC(methodToEvaluate);
 	}
 	risk = [locLow, locModerate, locHigh, locVeryHigh];
@@ -97,6 +91,7 @@ public int methodLOC(loc methodToEvaluate){
 	list[str] allLocMethodStr;
 	methodSrc = readFile(methodToEvaluate);
 	allLocMethodStr = split("\n", methodSrc);
+	println(allLocMethodStr[0]);
 	allLocMethod = size(allLocMethodStr);
 	//println(allLocMethod);
 	blankLines = countBlankLines(allLocMethodStr);
@@ -150,6 +145,5 @@ public int countCommentLines(list[str] file){
 						open = 1;
 			}		
 	}
-
 	return count;
 }
