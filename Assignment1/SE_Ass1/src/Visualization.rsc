@@ -4,15 +4,16 @@ import vis::Figure;
 import vis::Render;
 
 public void visualizeResults(str vol, str complex, str unitsize, str dup, str analys,
-								str change, str testabl, str maintain, int lOC, int dupLoc){
+								str change, str testabl, str maintain, int lOC, int dupLoc,
+								int unitLow, int unitMed, int unitHigh, int unitVHigh){
 
 	row1 = [box(fillColor("grey")), box(text("low"), fillColor("lightgrey")), 
 	box(text("medium"), fillColor("lightgrey")), box(text("high"),fillColor("lightgrey")), 
 	box(text("very high"), fillColor("lightgrey"))];
 	row2 = [box(text("Complexity per unit risk")), box(text("0")), box(text("0")), box(text("0")), 
 	box(text("0"))];
-	row3 = [box(text("Unit size risk")), box(text("0")), box(text("0")), box(text("0")), 
-	box(text("0"))];
+	row3 = [box(text("Unit size risk")), box(text("<unitLow>%")), box(text("<unitMed>%")), 
+	box(text("<unitHigh>%")), box(text("<unitVHigh>%"))];
 	row4 = [];
 	row5 = [box(fillColor("grey")), box(text("LOC"),fillColor("lightgrey")), 
 	box(text("Duplicated LOC"), fillColor("lightgrey")), box(text("Score"), fillColor("lightgrey"))];
