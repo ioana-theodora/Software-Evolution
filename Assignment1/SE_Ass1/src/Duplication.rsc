@@ -53,7 +53,7 @@ public list[str] cleanLines(list[str] lines){
 	for(l <- lines){
 		
 		if(!(/^[ \t\n]*$/ := l) && (l notin comments) && !(/<word:import ><rest:.*;$>/ := l) 
-				&& !(/^[ \t\n]*\{[\s\t\n]*$/ := l)  && !(/[ \t\n]*\}[\s\n\t]*$/ := l)
+				//&& !(/^[ \t\n]*\{[\s\t\n]*$/ := l)  && !(/[ \t\n]*\}[\s\n\t]*$/ := l)
 				&& !(/<first:package ><other:.*;$>/ := l)){ //&& !(/^[ \t\n]*@Override$/ := l) 
 				//&& !(/^[ \t\n]*;$/ := l)){
 				
@@ -126,12 +126,12 @@ public list[int] countDuplicates (list[str] file){
 					&& (file[index1 + 5] == file[index2 + 5])){
 
 					count += 1;
-					println("Is equal! <file[index1]> <file[index2]>");
-					println("Is equal! <file[index1 + 5]> <file[index2 + 5]>");
+					//println("Is equal! <file[index1]> <file[index2]>");
+					//println("Is equal! <file[index1 + 5]> <file[index2 + 5]>");
 					
 					while((index1 + count) < max && (index2 + count) < max 
 							&& (file[index1 + count] == file[index2 + count])){
-						println("Is equal! <file[index1 + count]> <file[index2 + count]>");
+						//println("Is equal! <file[index1 + count]> <file[index2 + count]>");
 						count += 1;
 					}
 					

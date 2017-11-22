@@ -15,6 +15,15 @@ import lang::java::jdt::m3::Core;
 import lang::java::jdt::m3::AST;
 import util::ValueUI;
 import Complexity;
+import UnitSize;
+import util::Math;
+
+
+int linesOfCode;
+real unitLow;
+real unitMed;
+real unitHigh;
+real unitVHigh;
 
 private int calculateRating(list[int] values){
 
@@ -64,10 +73,43 @@ private str rating(int val){
 
 }
 
-public list[int] volume(loc project){
+public int unitSize(loc project){
+	
+	list[loc] units = returnListUnits(project);
+	list[int] values = evaluateUnitSize(units);
+	unitLow = ((values[0]*1.0)/linesOfCode)*100;
+	unitMed = ((values[1]*1.0)/linesOfCode)*100;
+	unitHigh = ((values[2]*1.0)/linesOfCode)*100;
+	unitVHigh = ((values[3]*1.0)/linesOfCode)*100;
+	int rating = 0;
+
+	if(unitMed < 25 && unitHigh < 0 && unitVHigh < 0)
+		rating = 5;
+		
+	else if(unitMed < 30 && unitHigh < 5 && unitVHigh < 0)
+		rating = 4;
+
+	else if(unitMed < 40 && unitHigh < 10 && unitVHigh < 0)
+		rating = 3;
+
+	else if(unitMed < 50 && unitHigh < 15 && unitVHigh < 5)
+		rating = 2;
+		
+	else
+		rating = 1;
+		
+	println("low: <unitLow>");
+	println("medium: <unitMed>");
+	println("high: <unitHigh>");
+	println("veryHigh: <unitVHigh>");
+		
+	return rating;
+}
+
+public int volume(loc project){
 
 	list[loc] files = returnListFiles(project);
-	int linesOfCode = countCodeLinesProject(files);
+	linesOfCode = countCodeLinesProject(files);
 	total = countTotalLinesProject(files);
 	blanks = countBlankLinesProject(files);
 	comments = countCommentLinesProject(files);
@@ -106,7 +148,7 @@ public list[int] volume(loc project){
 	
 	println("Volume: <final>");
 	 
-	return [rating, linesOfCode];
+	return rating;
 
 }
 
@@ -117,12 +159,11 @@ public list[int] duplication(loc project){
 	st = now();
 
 	list[loc] files = returnListFiles(project);
-	int linesOfCode = countCodeLinesProject(files);
 	list[str] lines = cleanLines(projectLines(project));
 	list[int] duplicates = countDuplicates(lines);
 	println("Duplicates: <duplicates[0]>");
 	println("Lines: <duplicates[1]>");
-	real result = (duplicates[1]*1.0/linesOfCode)*100;
+	real result = (((duplicates[0]*6.0)+duplicates[1])/linesOfCode)*100;
 	str final = "";
 	int rating = 0;
 	
@@ -191,7 +232,7 @@ public int testability(int complexunit, int unitsize){
 	return result;
 }
 
-/*public int complexity(){ //TODO: DELETE
+public int complexity(){
 	list[int] complexityProject = [0,0,0,0];
 	//Init - start
 	println("Constructing the model");
@@ -204,18 +245,18 @@ public int testability(int complexunit, int unitsize){
 	println("Constructing the ASTs");
 	ASTs = {createAstFromFile(filename, true, javaVersion="1.7") | filename <- javaFiles};
 	println("---Done---");
-	Init - end
+	//Init - end
 	
-	Delete after testing start
-	ast = createAstFromFile(|java+compilationUnit:///src/smallsql/database/TableView.java|, true, javaVersion="1.7");
-	//text(ast);
-	methodsAST = { m | /Declaration m := ast, m is method || m is constructor || m is initializer};
+	//-Delete after testing start
+	ast = createAstFromFile(|java+compilationUnit:///src/smallsql/database/SSStatement.java|, true, javaVersion="1.7");
+	text(ast);
+	methodsAST = { m | /Declaration m := ast, m is method /*|| m is constructor || m is initializer*/};
 	println(size(methodsAST));
 	a = unitCyclomaticComplexity(methodsAST);
 	println(a);
-	-Delte after testing end
+	//-Delte after testing end
 	
-	int counter = 0;
+	/*int counter = 0;
 	for(ast <- ASTs){
 		//counter += 1;
 		println("Getting the methods");
@@ -227,34 +268,30 @@ public int testability(int complexunit, int unitsize){
 			complexityProject[i] = holder1[i] + holder2[i]; 
 		}
 		println(complexityProject);
-	}
-	return 1;
-}*/
-
-public int complexity(){
-	astsProject = createAstsFromEclipseProject(|project://smallsql0.21_src|, true);
-	text(astsProject);
-	methodsAst = { m | /Declaration m := astsProject, m is method};
-	text(methodsAst);
-	println(size(methodsAst));
-	a = unitCyclomaticComplexity(methodsAst);
-	println(a);
+	}*/
 	return 1;
 }
 
-public void main(/*loc project*/){
 
-	/*list[int] vol = volume(project);
+public void main(loc project){
+
+	linesOfCode = 0;
+	unitLow = 0.0;
+	unitMed = 0.0;
+	unitHigh = 0.0;
+	unitVHigh = 0.0;
+
+	int vol = volume(project);
 	int complex = 1;
-	int unitsize = 1;
+	int unitsize = unitSize(project);
 	list[int] dup = duplication(project);
-	analys = analysability(vol[0],dup[0],unitsize);
+	analys = analysability(vol,dup[0],unitsize);
 	change = changeability(complex,dup[0]);
 	testabl = testability(complex,unitsize);
 	maintain = calculateRating([analys,change,testabl]);
 	result = rating(maintain);
 	
-	volRat = rating(vol[0]);
+	volRat = rating(vol);
 	complexRat = rating(complex);
 	unitsizeRat = rating(unitsize);
 	dupRat = rating(dup[0]);
@@ -263,8 +300,9 @@ public void main(/*loc project*/){
 	testablRat = rating(testabl);
 	
 	visualizeResults(volRat, complexRat, unitsizeRat, dupRat, analysRat, changeRat, 
-						testablRat, result, vol[1], dup[1]);
+						testablRat, result, linesOfCode, dup[1], toInt(unitLow), toInt(unitMed),
+						toInt(unitHigh), toInt(unitVHigh));
 	
-	println("Maintainability: <result>");*/
-	complexity();
+	println("Maintainability: <result>");
+	
 }
