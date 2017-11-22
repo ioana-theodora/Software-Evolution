@@ -4,9 +4,11 @@ import IO;
 import List;
 import Read;
 
+
 public int countTotalLines(list[str] file){
 	return size(file);
 }
+
 
 public int countTotalLinesProject(list[loc] project){
 	
@@ -17,6 +19,7 @@ public int countTotalLinesProject(list[loc] project){
 
 	return lines;
 }
+
 
 public int countBlankLines(list[str] file){
 	count = 0;
@@ -29,6 +32,7 @@ public int countBlankLines(list[str] file){
 
 }
 
+
 public int countBlankLinesProject(list[loc] project){
 
 	lines = 0;
@@ -40,10 +44,36 @@ public int countBlankLinesProject(list[loc] project){
 
 public int countCommentLines(list[str] file){
 	count = 0;
+	open = 0;
 	for(l <- file){
-		if(/((\s|\/*)(\/\*|\s\*)|[^\w,\;]\s\/*\/|\/*\/)/ := l)
-			count += 1;
 			
+			if(/^[\s\t\n]*\/\// := l){
+				count += 1;
+				
+			}
+			
+			else if(/^.*\*\/[\s\t\n]*$/ := l){
+				if(!(!/^[\s\t\n]*\/\*.*\*\/$/ := l && /^[\s\t\n]*<x:[\s\S]+>\/\*.*\*\/$/ := l)){
+					count += 1;
+					open = 0;
+				}	
+			}
+			
+			
+			else if(open == 1 && !(/^[ \t\n]*$/ := l)){
+				count += 1;
+			}
+			
+			
+			else if(/^[\s\t\n]*\/\*.*$/ := l){
+				count += 1;
+				open = 1;
+			}
+
+			else if(/^[\s\t\n\S]*\/\*.*/ := l){
+					if(!/^[\s\t\n\S]*\"[\s\S]*\/\*|^.*\*\// := l)
+						open = 1;
+			}		
 	}
 
 	return count;
@@ -61,10 +91,8 @@ public int countCommentLinesProject(list[loc] project){
 
 public int countCodeLines (list[str] file){
 
-	int lines = size(file);
-	lines = lines - (countBlankLines(file) + countCommentLines(file));
+	return (size(file) - countBlankLines(file) - countCommentLines(file) );
 
-	return lines;
 }
 
 public int countCodeLinesProject(list[loc] project){
@@ -74,4 +102,6 @@ public int countCodeLinesProject(list[loc] project){
 	
 	return lines;
 }
+
+
 

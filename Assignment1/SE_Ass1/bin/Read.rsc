@@ -2,7 +2,12 @@ module Read
 
 import IO;
 import List;
+import Set;
 import util::Resources;
+import util::FileSystem;
+import lang::java::m3::Core;
+import lang::java::jdt::m3::Core;
+import lang::java::jdt::m3::AST;
 
 //not sure if this method is necessary
 public list[str] readFileIntoArray(loc file){
@@ -11,17 +16,27 @@ public list[str] readFileIntoArray(loc file){
 }
 
 public list[loc] returnListFiles(loc project){
-
-	list[loc] files = project.ls;
+	model = createM3FromEclipseProject(project);
+	return toList(files(model));
 	
-	while(!all(f <- files, isFile(f))){
-		if(isDirectory(files[0]))
-			files = tail(files) + files[0].ls;
-		else
-			files = tail(files);
+}
+
+public list[str] projectLines (loc project){
+	list[str] result = [];
+	list[loc] files = returnListFiles(project);
+	
+	for(f <- files){
+		result = result + readFileLines(f);
+	
 	}
 	
-	return files;
+	return result;
+
+}
+
+public list[loc] returnListUnits(loc project){
 	
+	model = createM3FromEclipseProject(project);
+	return toList(methods(model));
 }
 
