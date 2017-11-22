@@ -8,13 +8,13 @@ import Count;
 import Duplication;
 import DateTime;
 import Visualization;
+import Complexity;
 import util::Resources;
 import util::FileSystem;
 import lang::java::m3::Core;
 import lang::java::jdt::m3::Core;
 import lang::java::jdt::m3::AST;
 import util::ValueUI;
-import Complexity;
 import UnitSize;
 import util::Math;
 
@@ -232,50 +232,21 @@ public int testability(int complexunit, int unitsize){
 	return result;
 }
 
-public int complexity(){
-	list[int] complexityProject = [0,0,0,0];
-	//Init - start
-	println("Constructing the model");
-	myModel = createM3FromEclipseProject(|project://smallsql0.21_src|);
-	println("---Done---");
-	println("Getting the .java files");
-	javaFiles = files(myModel);
-	text(javaFiles);
-	println("---Done---");
-	println("Constructing the ASTs");
-	ASTs = {createAstFromFile(filename, true, javaVersion="1.7") | filename <- javaFiles};
-	println("---Done---");
-	//Init - end
-	
-	//-Delete after testing start
-	ast = createAstFromFile(|java+compilationUnit:///src/smallsql/database/SSStatement.java|, true, javaVersion="1.7");
-	text(ast);
-	methodsAST = { m | /Declaration m := ast, m is method /*|| m is constructor || m is initializer*/};
-	println(size(methodsAST));
-	a = unitCyclomaticComplexity(methodsAST);
+public int complexity(loc project){
+	astsProject = createAstsFromEclipseProject(project/*|project://smallsql0.21_src|*/, true);
+	text(astsProject);
+	methodsAst = { m | /Declaration m := astsProject, m is method};
+	text(methodsAst);
+	println(size(methodsAst));
+	a = unitCyclomaticComplexity(methodsAst);
 	println(a);
-	//-Delte after testing end
-	
-	/*int counter = 0;
-	for(ast <- ASTs){
-		//counter += 1;
-		println("Getting the methods");
-		methodsAST = { m | /Declaration m := ast, m is method || m is constructor || m is initializer};
-		println("---Done---");
-		holder1 = complexityProject;
-		holder2 = unitCyclomaticComplexity(methodsAST);
-		for(int i <- [0..size(holder1)]){
-			complexityProject[i] = holder1[i] + holder2[i]; 
-		}
-		println(complexityProject);
-	}*/
 	return 1;
 }
 
 
 public void main(loc project){
 
-	linesOfCode = 0;
+	/*linesOfCode = 0;
 	unitLow = 0.0;
 	unitMed = 0.0;
 	unitHigh = 0.0;
@@ -303,6 +274,6 @@ public void main(loc project){
 						testablRat, result, linesOfCode, dup[1], toInt(unitLow), toInt(unitMed),
 						toInt(unitHigh), toInt(unitVHigh));
 	
-	println("Maintainability: <result>");
-	
+	println("Maintainability: <result>");*/
+	complexity(project);
 }

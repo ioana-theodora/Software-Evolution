@@ -10,7 +10,6 @@ import lang::java::m3::Core;
 import lang::java::jdt::m3::Core;
 import lang::java::jdt::m3::AST;
 import util::ValueUI;
-import Exception;
 import Type;
 //--------------------------------
 
@@ -46,7 +45,7 @@ public list[int] unitCyclomaticComplexity(set[Declaration] methodsInProject){
 		methodINmethod = { m | /TypeSymbol  m := methodAST, m is method};
 		//println(methodINmethod);
 		for(m <- methodINmethod){
-			//println(m);
+			println(m);
 			visit(m){
 				case \method(x,_,_,_): methodLocation = x;
 			}
@@ -66,9 +65,10 @@ public list[int] unitCyclomaticComplexity(set[Declaration] methodsInProject){
 }
 
 public list[int] riskEvaluation(int complexityPerUnit, loc methodToEvaluate, int locLow, int locModerate, int locHigh, int locVeryHigh){
-	println(complexityPerUnit);
+	println("Complexity: <complexityPerUnit>");
 	if(complexityPerUnit >= 1 && complexityPerUnit <= 10){
 		println("Low risk");
+		println(methodToEvaluate);
 		locLow += methodLOC(methodToEvaluate);
 	}
 	if(complexityPerUnit >= 11 && complexityPerUnit <= 20){
@@ -89,7 +89,9 @@ public list[int] riskEvaluation(int complexityPerUnit, loc methodToEvaluate, int
 
 public int methodLOC(loc methodToEvaluate){
 	list[str] allLocMethodStr;
+	println(typeOf(methodToEvaluate));
 	methodSrc = readFile(methodToEvaluate);
+	println(methodSrc);
 	allLocMethodStr = split("\n", methodSrc);
 	println(allLocMethodStr[0]);
 	allLocMethod = size(allLocMethodStr);
