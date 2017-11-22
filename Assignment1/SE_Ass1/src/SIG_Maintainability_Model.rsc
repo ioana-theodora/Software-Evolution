@@ -6,6 +6,7 @@ import Read;
 import Count;
 import Duplication;
 import DateTime;
+import Visualization;
 
 private int calculateRating(list[int] values){
 
@@ -55,7 +56,7 @@ private str rating(int val){
 
 }
 
-public int volume(loc project){
+public list[int] volume(loc project){
 
 	list[loc] files = returnListFiles(project);
 	int linesOfCode = countCodeLinesProject(files);
@@ -97,13 +98,13 @@ public int volume(loc project){
 	
 	println("Volume: <final>");
 	 
-	return rating;
+	return [rating, linesOfCode];
 
 }
 
 
 
-public int duplication(loc project){
+public list[int] duplication(loc project){
 
 	st = now();
 
@@ -146,7 +147,7 @@ public int duplication(loc project){
 	
 	println(createDuration(st,now()));
 	
-	return rating;
+	return [rating, duplicates[1]];
 
 }
 
@@ -186,15 +187,26 @@ public int testability(int complexunit, int unitsize){
 
 public void main(loc project){
 
-	int vol = volume(project);
-	int complex = 0;
-	int unitsize = 0;
-	int dup = duplication(project);
-	analys = analysability(vol,dup,unitsize);
-	change = changeability(complex,dup);
+	list[int] vol = volume(project);
+	int complex = 1;
+	int unitsize = 1;
+	list[int] dup = duplication(project);
+	analys = analysability(vol[0],dup[0],unitsize);
+	change = changeability(complex,dup[0]);
 	testabl = testability(complex,unitsize);
 	maintain = calculateRating([analys,change,testabl]);
 	result = rating(maintain);
+	
+	volRat = rating(vol[0]);
+	complexRat = rating(complex);
+	unitsizeRat = rating(unitsize);
+	dupRat = rating(dup[0]);
+	analysRat = rating(analys);
+	changeRat = rating(change);
+	testablRat = rating(testabl);
+	
+	visualizeResults(volRat, complexRat, unitsizeRat, dupRat, analysRat, changeRat, 
+						testablRat, result, vol[1], dup[1]);
 	
 	println("Maintainability: <result>");
 	
