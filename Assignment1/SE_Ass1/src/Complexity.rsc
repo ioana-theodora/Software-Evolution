@@ -11,17 +11,20 @@ import lang::java::jdt::m3::Core;
 import lang::java::jdt::m3::AST;
 import util::ValueUI;
 import Type;
+import Count;
+import Read;
 //--------------------------------
 
 
 public list[int] unitCyclomaticComplexity(set[Declaration] methodsInProject){
 	list[int] calculatedRiskFile = [0, 0, 0, 0];
 	int counter = 0;
+	loc methodLocation;
 	for(methodAST <- methodsInProject){
 		counter += 1;
 		//text(methodAST);//text each method for check
 		int complexity = 1; //always starts with 1
-		loc methodLocation;
+		
 		println("Analysing method");
 		visit(methodAST){
 			case \if(_,_) : complexity += 1;
@@ -58,10 +61,10 @@ public list[int] unitCyclomaticComplexity(set[Declaration] methodsInProject){
 		for(int i <- [0..size(holder1)]){
 			calculatedRiskFile[i] = holder1[i]+holder2[i];
 		}
-		println(calculatedRiskFile);
+		//println(calculatedRiskFile);
 	}
-	//return calculatedRiskFile;
-	return [1];
+	return calculatedRiskFile;
+
 }
 
 public list[int] riskEvaluation(int complexityPerUnit, loc methodToEvaluate, int locLow, int locModerate, int locHigh, int locVeryHigh){
@@ -88,64 +91,11 @@ public list[int] riskEvaluation(int complexityPerUnit, loc methodToEvaluate, int
 }
 
 public int methodLOC(loc methodToEvaluate){
-	list[str] allLocMethodStr;
+
 	println(typeOf(methodToEvaluate));
-	methodSrc = readFile(methodToEvaluate);
-	println(methodSrc);
-	allLocMethodStr = split("\n", methodSrc);
-	println(allLocMethodStr[0]);
-	allLocMethod = size(allLocMethodStr);
-	//println(allLocMethod);
-	blankLines = countBlankLines(allLocMethodStr);
-	//println(blankLines);
-	commentLines = countCommentLines(allLocMethodStr);
-	//println(commentLines);
-	locMethod = allLocMethod - blankLines - commentLines;
-	//println(locMethod);
+	println(methodToEvaluate);
+	locMethod = countCodeLinesProject([methodToEvaluate]);
+
 	return locMethod;
 }
 
-public int countBlankLines(list[str] file){
-	count = 0;
-	for(l <- file){
-		if(/^[ \t\n]*$/ := l)
-			count += 1;
-	}
-	return count;
-}
-
-public int countCommentLines(list[str] file){
-	count = 0;
-	open = 0;
-	for(l <- file){
-			
-			if(/^[\s\t\n]*\/\// := l){
-				count += 1;
-				
-			}
-			
-			else if(/^.*\*\/[\s\t\n]*$/ := l){
-				if(!(!/^[\s\t\n]*\/\*.*\*\/$/ := l && /^[\s\t\n]*<x:[\s\S]+>\/\*.*\*\/$/ := l)){
-					count += 1;
-					open = 0;
-				}	
-			}
-			
-			
-			else if(open == 1 && !(/^[ \t\n]*$/ := l)){
-				count += 1;
-			}
-			
-			
-			else if(/^[\s\t\n]*\/\*.*$/ := l){
-				count += 1;
-				open = 1;
-			}
-
-			else if(/^[\s\t\n\S]*\/\*.*/ := l){
-					if(!/^[\s\t\n\S]*\"[\s\S]*\/\*|^.*\*\// := l)
-						open = 1;
-			}		
-	}
-	return count;
-}

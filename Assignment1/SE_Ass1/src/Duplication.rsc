@@ -53,7 +53,7 @@ public list[str] cleanLines(list[str] lines){
 	for(l <- lines){
 		
 		if(!(/^[ \t\n]*$/ := l) && (l notin comments) && !(/<word:import ><rest:.*;$>/ := l) 
-				//&& !(/^[ \t\n]*\{[\s\t\n]*$/ := l)  && !(/[ \t\n]*\}[\s\n\t]*$/ := l)
+				&& !(/^[ \t\n]*\{[\s\t\n]*$/ := l)  && !(/[ \t\n]*\}[\s\n\t]*$/ := l)
 				&& !(/<first:package ><other:.*;$>/ := l)){ //&& !(/^[ \t\n]*@Override$/ := l) 
 				//&& !(/^[ \t\n]*;$/ := l)){
 				

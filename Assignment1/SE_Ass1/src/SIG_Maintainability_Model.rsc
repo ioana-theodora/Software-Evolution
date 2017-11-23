@@ -24,6 +24,10 @@ real unitLow;
 real unitMed;
 real unitHigh;
 real unitVHigh;
+real compLow;
+real compMed;
+real compHigh;
+real compVHigh;
 
 private int calculateRating(list[int] values){
 
@@ -234,26 +238,56 @@ public int testability(int complexunit, int unitsize){
 
 public int complexity(loc project){
 	astsProject = createAstsFromEclipseProject(project/*|project://smallsql0.21_src|*/, true);
-	text(astsProject);
-	methodsAst = { m | /Declaration m := astsProject, m is method};
-	text(methodsAst);
+	//text(astsProject);
+	methodsAst = { m | /Declaration m := astsProject, m is method || m is constructor};
+	//text(methodsAst);
 	println(size(methodsAst));
-	a = unitCyclomaticComplexity(methodsAst);
-	println(a);
-	return 1;
+	values = unitCyclomaticComplexity(methodsAst);
+	compLow = ((values[0]*1.0)/linesOfCode)*100;
+	compMed = ((values[1]*1.0)/linesOfCode)*100;
+	compHigh = ((values[2]*1.0)/linesOfCode)*100;
+	compVHigh = ((values[3]*1.0)/linesOfCode)*100;
+	int rating = 0;
+
+	if(compMed < 25 && compHigh < 0 && compVHigh < 0)
+		rating = 5;
+		
+	else if(compMed < 30 && compHigh < 5 && compVHigh < 0)
+		rating = 4;
+
+	else if(compMed < 40 && compHigh < 10 && compVHigh < 0)
+		rating = 3;
+
+	else if(compMed < 50 && compHigh < 15 && compVHigh < 5)
+		rating = 2;
+		
+	else
+		rating = 1;
+		
+	println("complow: <compLow>");
+	println("compmedium: <compMed>");
+	println("comphigh: <compHigh>");
+	println("compveryHigh: <compVHigh>");
+		
+	
+	return rating;
 }
 
 
 public void main(loc project){
 
-	/*linesOfCode = 0;
+	linesOfCode = 0;
 	unitLow = 0.0;
 	unitMed = 0.0;
 	unitHigh = 0.0;
 	unitVHigh = 0.0;
+	compLow = 0.0;
+	compMed = 0.0;
+	compHigh = 0.0;
+	compVHigh = 0.0;
 
 	int vol = volume(project);
-	int complex = 1;
+	int complex = complexity(project);;
 	int unitsize = unitSize(project);
 	list[int] dup = duplication(project);
 	analys = analysability(vol,dup[0],unitsize);
@@ -271,9 +305,10 @@ public void main(loc project){
 	testablRat = rating(testabl);
 	
 	visualizeResults(volRat, complexRat, unitsizeRat, dupRat, analysRat, changeRat, 
-						testablRat, result, linesOfCode, dup[1], toInt(unitLow), toInt(unitMed),
-						toInt(unitHigh), toInt(unitVHigh));
+						testablRat, result, linesOfCode, dup[1], ceil(unitLow), ceil(unitMed),
+						ceil(unitHigh), ceil(unitVHigh), ceil(compLow), ceil(compMed),
+						ceil(compHigh), ceil(compVHigh));
 	
-	println("Maintainability: <result>");*/
-	complexity(project);
+	println("Maintainability: <result>");
+	
 }
