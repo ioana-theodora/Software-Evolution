@@ -16,16 +16,16 @@ public set[Declaration] getMethodsfromAsts(set[Declaration] astsFromProject){
 	return { methodsProject | /Declaration methodsProject := astsFromProject, methodsProject is method};
 }
 
-public loc getDecl(Declaration methodAst){
-	return methodAst.decl;
+public loc getSrc(Declaration methodAst){
+	return methodAst.src;
 }
 
 public set[loc] getMethodsLocation(set[Declaration] methodsAsts){
-	return mapper(methodsAsts, getDecl);
+	return mapper(methodsAsts, getSrc);
 }
 
 public set[list[str]] getMethodsReadLine(set[loc] methodsLocations){ //set or list - what is more utile?
-	//stringMethods = mapper(methodsLocations, readFileLines);//do for here, but better than for after it works
+	//return stringMethods = mapper(methodsLocations, readFileLines);//do for here, but better than for after it works
 	println("Total number of methods: <size(methodsLocations)>");
 	set[list[str]] methodsGood = {};
 	int counterGood = 0;

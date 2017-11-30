@@ -20,5 +20,5 @@ public void Main(loc project){
 	locationsOfMethods = getMethodsLocation(methodsFromAsts);
 	//text(locationsOfMethods);
 	readLineMethods = getMethodsReadLine(locationsOfMethods);
-	//text(readLineMethods);
+	text(readLineMethods);
 }
