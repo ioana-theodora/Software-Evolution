@@ -140,7 +140,7 @@ public SuffixTree getChild(str child){
 	kids = getListChilds(root);
 	get = [];
 	
-	println("Find child: <child>");
+	//println("Find child: <child>");
 	
 	while(child != ""){
 		get = [k | k <- kids, startsWith(child, valueOf(k))];
@@ -201,15 +201,15 @@ public list[SuffixTree] getAllLeafs(SuffixTree t){
 
 }
 
-public list[int] getIndexes(SuffixTree t){
+public list[list[int]] getIndexes(SuffixTree t){
 
-	list[int] result = [];
+	list[list[int]] result = [];
 	leafs = getAllLeafs(t);
 	
 	for(l <- leafs){
 		x = getInts(l);
 		if(x notin result)
-			result = result + x;
+			result = result + [x];
 	
 	} 
 
@@ -245,12 +245,12 @@ private void compactST(SuffixTree t, str previous, int onRoot, int hasSibling,
 			if(onRoot == 1)
 				previous = valueOf(k);
 		
-			println("Actual: <k>");
+			/*println("Actual: <k>");
 			println("On Root?: <onRoot>");
 			println("Has Sibling?: <hasSibling>");
 			println("Has Uncle?: <hasUncle>");
 			println("Previous received: <previous>");
-			println("Save Parent: <saveParent>");
+			println("Save Parent: <saveParent>");*/
 		
 			if(numChilds(k) <= 1){
 				if(hasSibling == 1){
@@ -264,32 +264,32 @@ private void compactST(SuffixTree t, str previous, int onRoot, int hasSibling,
 					else
 						saveParent = valueOf(t);
 					
-					println("Save Parent: <saveParent>");
+					//println("Save Parent: <saveParent>");
 					save = previous;
 					previous = previous + valueOf(k);
 				}
 				before = getChild(previous);
-				println("Before: <before>");
+				//println("Before: <before>");
 				after = merge(before);
-				println("After: <after>");
+				//println("After: <after>");
 				update(after);
-				println("Root now: <root>");
+				//println("Root now: <root>");
 				
 				if(hasUncle == 1 || hasSibling == 1){
 					previous = mergeStrings(previous,valueOf(after));
 					if(numChilds(after) > 1){
-						println("Previous sent: <previous>");
+						//println("Previous sent: <previous>");
 						compactST(after,previous,0,1,1);
 					}
 						
 					else{
-						println("Previous sent: <previous>");
+						//println("Previous sent: <previous>");
 						compactST(k,previous,0,0,1);
 					}
 				}
 				else{
 					previous = save+valueOf(after);
-					println("Previous sent: <previous>");
+					//println("Previous sent: <previous>");
 					if(numChilds(after) > 1)
 						compactST(after,previous,0,1,0);
 					else
@@ -436,11 +436,10 @@ public list[list[int]] main(list[str] values){
 	
 	for(k <- kids){
 		lst = getIndexes(k);
-		if(lst notin result)
-			result = result + [lst];
+		result = result + lst;
 	}
 
-	return result;
+	return dup(result);
 
 }
 
