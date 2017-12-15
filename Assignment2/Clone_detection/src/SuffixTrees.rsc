@@ -208,7 +208,7 @@ public list[list[int]] getIndexes(SuffixTree t){
 	
 	for(l <- leafs){
 		x = getInts(l);
-		if(x notin result)
+		if(x notin result && size(x) > 1)
 			result = result + [x];
 	
 	} 
