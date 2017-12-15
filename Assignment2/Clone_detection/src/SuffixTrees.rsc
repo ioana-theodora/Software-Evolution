@@ -428,18 +428,27 @@ public SuffixTree buildST(list[str] values){
 
 }
 
-public list[list[int]] main(list[str] values){
+public list[list[int]] duplicates(SuffixTree t){
 
-	suffixT = buildST(values);
-	kids = getListChilds(suffixT);
+	kids = getListChilds(t);
 	list[list[int]] result = [];
 	
 	for(k <- kids){
 		lst = getIndexes(k);
 		result = result + lst;
 	}
+	
+	result = dup(result);
+	
+	for(r <- result){
+		if(any(y <- result, r != y, r < y)){ 
+			i = indexOf(result,r); 
+			result = delete(result,i);
+		}
+	
+	}
 
-	return dup(result);
+	return result;
 
 }
 
