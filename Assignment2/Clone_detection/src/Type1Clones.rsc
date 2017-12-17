@@ -155,3 +155,12 @@ public list[str] countDuplicates (list[list[str]] file){
 	
 	return equalLines;
 }
+
+public void writeOnFile(list[str] lines, file){
+	
+	for(l <- lines)
+		lines[indexOf(lines,l)] = l+"\n";
+	
+	writeFile(file,lines);
+
+}
