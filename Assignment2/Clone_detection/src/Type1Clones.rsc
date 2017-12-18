@@ -1,5 +1,7 @@
 module Type1Clones
 
+import IO;
+
 private list[str] commentLines(list[str] lines){
 
 	list[str] result = [];
@@ -159,11 +161,18 @@ public list[str] countDuplicates (list[list[str]] file){
 	return equalLines;
 }
 
-public void writeOnFile(list[str] lines, file){
+public void writeOnFile(list[list[str]] lines, loc file){
 	
-	for(l <- lines)
-		lines[indexOf(lines,l)] = l+"\n";
+	list[str] toPrint = ["Clone\n"];
 	
-	writeFile(file,lines);
+	for(l <- lines){
+		for(ls <- l)
+			toPrint = toPrint + ls + "\n";
+		
+		toPrint = toPrint + "\nClone\n";
+	
+	}
+	
+	writeFile(file,toPrint);
 
 }

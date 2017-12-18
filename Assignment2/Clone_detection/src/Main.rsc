@@ -4,8 +4,11 @@ import Type1Clones;
 import Type2Clones;
 import Utile;
 import SuffixTrees;
+import Count;
 //------------------
 import IO;
+import List;
+import String;
 import util::Resources;
 import util::FileSystem;
 import lang::java::m3::Core;
@@ -26,24 +29,34 @@ public void Main(loc project){
 	
 	
 ////////////////// "REPORT" /////////////////////////////////////////////////
-	
-	list[string] serializedSubTrees = [];
+
+	lOc = countCodeLinesProject(project.ls);
+
+	//the serialized subtrees will be here
+	list[str] serializedSubTrees = [];
+	//Not sure if we still this, maybe duplicates can do this right away?
 	SuffixTree suffixT = buildST(serializedSubTrees);
+	//each list[int] of dups is the indexes from serializedSubTrees that have
+	//duplicated code fragments
 	list[list[int]] dups = duplicates(suffixT);
 	//each list[str] is the duplicated lines of code for each group of dups
 	list[list[str]] duplicatedStrs = [];
-	//need to change aux type
-	list[str] aux = [];
+	//this will help after
+	list[list[str]] aux = [];
 	
-	//Need to change this for loop, just writing here the main idea
+	
 	for(d <- dups){
 		for(ds <- d){
 			//goes to each subtree that have duplicated code, get location, 
 			//get lines of code (list[str])
-			 aux = aux + serializedSubTrees[ds];
+			 location = serializedSubTrees[ds]; //need the location of each subtree
+			 									//by using the serialized result
+			 lines = cleanLines(readFileLines(location));
+			 aux = aux + [lines];
 	
 		}
 		duplicatedStrs = duplicatedStrs + [countDuplicates(aux)];
+		writeOnFile(duplicatedStrs,|project://Clone_detection/src/type1clones.txt|);
 	}
 	
 	countDupLines = 0;
@@ -79,6 +92,25 @@ public void Main(loc project){
 	//saves the indexes of the clone classes
 	list[int] cloneClasses = [indexOf(dups,x) | x <- dups, size(x) > 2];
 	
-	//NOT DONE!!!
+	maxClass = size(duplicatedStrs[cloneClasses[0]]);
+	biggerClass = duplicatedStrs[cloneClasses[0]];
+
+	for(cc <- cloneClasses){	
+		
+		if(max < size(duplicatedStrs[cc])){
+			max = size(duplicatedStrs[cc]);
+			biggerClass = duplicatedStrs[cc];
+		}
 	
+	}
+	
+	percentage = countDupLines/lOc;
+	
+	println("Duplicated Lines: <percantage>%");
+	println("Number of clones: <numOfClones>");
+	println("Number of clone classes: <numCloneClass>");
+	println("Biggest Clone: <max> lines.");
+	println("Biggest Clone Class: <maxClass> lines.");
+	println("Example Clone1: <maxClone>");
+	println("Example Clone2: <biggerClass>");
 }
