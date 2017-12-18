@@ -63,7 +63,10 @@ public list[str] cleanLines(list[str] lines){
 	return result;
 }
 
-
+/**
+* Each list[str] on file is the lines of code for the filesthat have duplicated
+* lines
+*/
 public list[str] countDuplicates (list[list[str]] file){
 	
 	int max = size(file[0]);

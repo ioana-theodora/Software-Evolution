@@ -439,14 +439,6 @@ public list[list[int]] duplicates(SuffixTree t){
 	}
 	
 	result = dup(result);
-	
-	/*for(r <- result){
-		if(any(y <- result, r != y, r < y)){ 
-			i = indexOf(result,r); 
-			result = delete(result,i);
-		}
-	
-	}*/
 
 	return result;
 
