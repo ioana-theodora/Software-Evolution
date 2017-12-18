@@ -12,6 +12,7 @@ import lang::java::jdt::m3::AST;
 import ParseTree;
 import util::ValueUI;
 import Node;
+import String;
 
 
 public str subTreeToString (Statement subTree){
@@ -85,6 +86,12 @@ public str serializingAST(Declaration astMethod){
 	}
 	for(method <-  subTreesList){
 		methodWhole += method;
+	}
+	if(/<sequence:,*src=\|.+\|\(.+?\),decl=\|.+?\|>/ := methodWhole){
+		methodWhole = replaceFirst(methodWhole, sequence, "");
+	}
+	if(/<sequence:typ=class\(\|java\+class:\/\/\/.+?\)\)\)>/ := methodWhole){
+		methodWhole = replaceFirst(methodWhole, sequence, "");
 	}
 	//text(methodWhole);
 	//text(subTreesList);

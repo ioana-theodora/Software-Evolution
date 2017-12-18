@@ -23,8 +23,12 @@ public void Main(loc project){
 	//text(methodsFromAsts);
 	serilizationsFromMethodsASTS = serializingASTS(methodsFromAsts);
 	text(serilizationsFromMethodsASTS);
+	
+	
 	locationAndSerialization = mappingSubtreesWithLocation(methodsFromAsts);
 	text(locationAndSerialization);
+	
+	
 	/*locationsOfMethods = getMethodsLocation(methodsFromAsts);
 	//text(locationsOfMethods);
 	readLineMethods = getMethodsReadLine(locationsOfMethods);
