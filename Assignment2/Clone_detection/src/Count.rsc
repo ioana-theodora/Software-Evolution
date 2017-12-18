@@ -95,20 +95,10 @@ public int countCodeLines (list[str] file){
 
 }
 
-public list[loc] countCodeLinesProject(list[loc] project){
+public int countCodeLinesProject(list[loc] project){
 	lines = 0;
-	list[loc] problem = [];
-	for(p <- project){ try
+	for(p <- project)
 		lines += countCodeLines(readFileLines(p));
 	
-		catch: problem = problem + p;
-	
-	}
-	
-	//println("<problem>");
-	
-	return problem;
+	return lines;
 }
-
-
-

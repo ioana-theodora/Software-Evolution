@@ -371,6 +371,7 @@ public SuffixTree buildST(list[str] values){
 		int max = size(v);
 		//CHANGE MADE HERE
 		while(currentIndex < max){
+			println("Is working");
 			if(!hasChild(root, currentValue)){
 				root = addNodeST(root, leaf(currentValue,[indexList]));
 				
@@ -425,6 +426,7 @@ public SuffixTree buildST(list[str] values){
 		previousIndex = 0;
 		currentValue = "";
 		previousValue = "";
+		println("Done: <v>");
 	
 	}
 	
