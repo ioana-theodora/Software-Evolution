@@ -14,26 +14,48 @@ import util::ValueUI;
 import Node;
 
 
-/*public list[node] serializingAST(node iNode){
-	text(iNode);
-	list[node] nodeList = [];
-	top-down visit (iNode) {
-		case node x: {
-			nodeList += x;
-		}
-	}
-	text(nodeList);
-	return nodeList;
-}*/
-
 public str subTreeToString (Statement subTree){
-	text(subTree);
+	//text(subTree);
 	str subTreeString = "";
 	top-down visit (subTree) {
 		case Statement s: {
-			if(/<nameStatement:^\w+>/ := toString(s))
-				subTreeString += nameStatement + " ";
+			if(/<nameStatement:^\w+>/ := toString(s)){
+				if(nameStatement != "expressionStatement" && nameStatement != "declarationStatement")
+					subTreeString += nameStatement + " ";
+				if(nameStatement == "declarationStatement")
+					subTreeString += "= ";
+			}
 		}
+		case \characterLiteral(x):
+			subTreeString += x + " ";
+		case \fieldAccess(_, _, x):
+			subTreeString += x + " ";
+		case \fieldAccess(_,x):
+			subTreeString += x + " ";
+		case \number(x):
+			subTreeString += x + " ";
+		case \stringLiteral(x):
+			subTreeString += x + " ";
+		case \variable(x,_):
+			subTreeString += x + " ";
+		case \variable(x,_,_):
+			subTreeString += x + " ";
+		case \infix(_,x,_):
+			subTreeString += x + " ";
+    	case \postfix(_,x):
+    		subTreeString += x + " ";
+    	case \prefix(x,_):
+    		subTreeString += x + " ";
+    	case \markerAnnotation(x):
+    		subTreeString += x + " ";
+    	case \normalAnnotation(x,_):
+    		subTreeString += x + " ";
+    	case \memberValuePair(x,_):
+    		subTreeString += x + " ";             
+    	case \singleMemberAnnotation(x,_):
+    		subTreeString += x + " ";
+		case \assignment(_,x,_):
+			subTreeString += x + " ";
 		case \simpleName(nameVariable): 
 			subTreeString += nameVariable + " ";
 		case \methodCall(_,nameMethod,_):
@@ -41,37 +63,53 @@ public str subTreeToString (Statement subTree){
 		case \methodCall(_,_,nameMethod,_):
 			subTreeString += nameMethod + "() ";
 	}
-	text(subTreeString);
-	return "0";
+	//text(subTreeString);
+	return subTreeString;
 }
 
-public list[str] serializingAST(Declaration astMethod){
-	text(astMethod);
+public str serializingAST(Declaration astMethod){
+	//text(astMethod);
 	list[str] subTreesList = [];
+	str methodWhole = "";
 	top-down visit (astMethod) {
 		case \block(subTrees):{
-			text(subTrees);
+			//text(subTrees);
 			for(int i <-[0..size(subTrees)]){
 				subTreesList += subTreeToString(subTrees[i]);
 			}
 		}
+		case \method(x,y,_,_,_):{
+			subTreesList += toString(x) + " ";
+			subTreesList += y + " ";
+		}
 	}
-	text(subTreesList);
-	return subTreesList;
+	for(method <-  subTreesList){
+		methodWhole += method;
+	}
+	//text(methodWhole);
+	//text(subTreesList);
+	return methodWhole;
 }
 
-public list[node] serializingASTS(set[Declaration] astsMethods){
-	list[node] nodeList = [];
+public map[str,loc] mappingSubtreesWithLocation(set[Declaration] astsMethods){
+	map[str,loc] mapping = ();
 	astsList = toList(astsMethods);
-	println(size(astsList));
-	text(astsList);
-	/*for(astMethod <- astsMethods){
-		nodeList += serializingAST(astMethod);
-	}*/
-	text(astsList[38].decl);
-	///nodeList += serializingAST(a[1]);
-	text(serializingAST(astsList[38]));
-	//println(nodeList);
+	for(int i <- [0..size(astsList)]){
+		mapping += (serializingAST(astsList[i]):astsList[i].src);
+	}
+	text(mapping);
+	return mapping;
+}
+
+public list[str] serializingASTS(set[Declaration] astsMethods){
+	list[str] nodeList = [];
+	astsList = toList(astsMethods);
+	//println(size(astsList));
+	//text(astsList);
+	for(int i <- [0..size(astsList)]){
+		nodeList += serializingAST(astsList[i]);
+	}
+	text(nodeList);
 	println(size(nodeList));
 	return nodeList;
 }
