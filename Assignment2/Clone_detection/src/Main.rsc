@@ -3,12 +3,11 @@ module Main
 import Type1Clones;
 import Type2Clones;
 import Utile;
-import SuffixTrees;
-import Count;
+import Visualization;
+import Serializing;
 //------------------
 import IO;
-import List;
-import String;
+import Set;
 import util::Resources;
 import util::FileSystem;
 import lang::java::m3::Core;
@@ -19,18 +18,19 @@ import util::ValueUI;
 public void Main(loc project){
 	astsFromProject = getAstsFromProject(project);
 	//text(astsFromProject);
+	//text(visualizationClonesFiles(astsFromProject));
 	methodsFromAsts = getMethodsfromAsts(astsFromProject);
 	//text(methodsFromAsts);
-	locationsOfMethods = getMethodsLocation(methodsFromAsts);
+	serilizationsFromMethodsASTS = serializingASTS(methodsFromAsts);
+	text(serilizationsFromMethodsASTS);
+	/*locationsOfMethods = getMethodsLocation(methodsFromAsts);
 	//text(locationsOfMethods);
 	readLineMethods = getMethodsReadLine(locationsOfMethods);
-	text(readLineMethods);
+	text(readLineMethods);*/
 	
-	
-	
-////////////////// "REPORT" /////////////////////////////////////////////////
+	////////////////// "REPORT" /////////////////////////////////////////////////
 
-	lOc = countCodeLinesProject(project.ls);
+	/*lOc = countCodeLinesProject(project.ls);
 
 	//the serialized subtrees will be here
 	list[str] serializedSubTrees = [];
@@ -112,5 +112,5 @@ public void Main(loc project){
 	println("Biggest Clone: <max> lines.");
 	println("Biggest Clone Class: <maxClass> lines.");
 	println("Example Clone1: <maxClone>");
-	println("Example Clone2: <biggerClass>");
+	println("Example Clone2: <biggerClass>");*/
 }
