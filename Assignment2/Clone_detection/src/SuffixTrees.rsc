@@ -5,6 +5,14 @@ import List;
 import String;
 import IO;
 
+/**
+ * each node of the suffix tree has a value str and a list of int that safes in 
+ * which index, on the list of str that is given, is the value str on the node 
+ * is located
+ * the tree type also has a list of SuffixTree which are the childs of that node
+ * the leaf doesn't have a list of SuffixTree beacause is the last child of the
+ * subtree
+ */
 data SuffixTree = leaf(str S, list [int N])
 				| tree(str S, list[SuffixTree] L, list[int] N);
 				
