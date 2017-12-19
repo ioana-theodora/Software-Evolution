@@ -1,8 +1,10 @@
 module Type1Clones
 
 import IO;
+import String;
+import List;
 
-private list[str] commentLines(list[str] lines){
+public list[str] commentLines(list[str] lines){
 
 	list[str] result = [];
 	open = 0;
@@ -27,8 +29,10 @@ private list[str] commentLines(list[str] lines){
 			
 			
 			else if(/^[\s\t\n]*\/\*.*$/ := l){
-				result = result + l;
-				open = 1;
+				if(!(/^\/\*/ := l)){
+					result = result + l;
+					open = 1;
+				}
 			}
 
 			else if(/^[\s\t\n\S]*\/\*.*/ := l){
@@ -66,7 +70,7 @@ public list[str] cleanLines(list[str] lines){
 }
 
 /**
-* Each list[str] on file is the lines of code for the filesthat have duplicated
+* Each list[str] on file is the lines of code for the files that have duplicated
 * lines
 */
 public list[str] countDuplicates (list[list[str]] file){

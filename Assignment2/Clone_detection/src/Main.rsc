@@ -6,9 +6,12 @@ import Utile;
 import Visualization;
 import Serializing;
 import SuffixTrees;
+import Count;
 //------------------
 import IO;
 import Set;
+import String;
+import List;
 import util::Resources;
 import util::FileSystem;
 import lang::java::m3::Core;
@@ -22,10 +25,12 @@ public void Main(loc project){
 	//text(visualizationClonesFiles(astsFromProject));
 	methodsFromAsts = getMethodsfromAsts(astsFromProject);
 	//text(methodsFromAsts);
+	
+	//the serialized subtrees will be here
 	serilizationsFromMethodsASTS = serializingASTS(methodsFromAsts);
 	text(serilizationsFromMethodsASTS);
 	
-	
+	//the serialized subtrees and their location will be here
 	locationAndSerialization = mappingSubtreesWithLocation(methodsFromAsts);
 	text(locationAndSerialization);
 	
@@ -37,7 +42,8 @@ public void Main(loc project){
 	
 	////////////////// "REPORT" /////////////////////////////////////////////////
 
-	//lOc = countCodeLinesProject(project.ls);
+	model = createM3FromEclipseProject(project);
+	lOc = countCodeLinesProject(toList(files(model)));
 
 	//the serialized subtrees will be here
 	//list[str] serializedSubTrees = [];
@@ -57,20 +63,27 @@ public void Main(loc project){
 		for(ds <- d){
 			//goes to each subtree that have duplicated code, get location, 
 			//get lines of code (list[str])
-			 location = locationAndSerialization[serilizationsFromMethodsASTS[ds]]; //need the location of each subtree
-			 									//by using the serialized result
+			 loc location = locationAndSerialization[serilizationsFromMethodsASTS[ds]]; 
+			 //need the location of each subtree by using the serialized result
+			 
 			 lines = cleanLines(readFileLines(location));
 			 aux = aux + [lines];
+			 
 	
 		}
+		println("Aux: <aux>");
 		duplicatedStrs = duplicatedStrs + [countDuplicates(aux)];
 		writeOnFile(duplicatedStrs,|project://Clone_detection/src/type1clones.txt|);
+		aux = [];
 	}
 	
 	countDupLines = 0;
+	println(duplicatedStrs);
 	
 	for(dstr <- duplicatedStrs)
 		countDupLines += size(dstr);
+		
+	println(countDupLines);
 
 	numOfClones = size(duplicatedStrs);
 	numCloneClass = 0;
@@ -98,7 +111,9 @@ public void Main(loc project){
 	}
 	
 	//saves the indexes of the clone classes
-	list[int] cloneClasses = [indexOf(dups,x) | x <- dups, size(x) > 2];
+	/*list[int] cloneClasses = [indexOf(dups,x) | x <- dups, size(x) > 2];
+	
+	
 	
 	maxClass = size(duplicatedStrs[cloneClasses[0]]);
 	biggerClass = duplicatedStrs[cloneClasses[0]];
@@ -110,15 +125,15 @@ public void Main(loc project){
 			biggerClass = duplicatedStrs[cc];
 		}
 	
-	}
+	}*/
 	
-	percentage = countDupLines/lOc;
+	percentage = (countDupLines*1.0)/lOc;
 	
-	println("Duplicated Lines: <percantage>%");
+	println("Duplicated Lines: <percentage>%");
 	println("Number of clones: <numOfClones>");
-	println("Number of clone classes: <numCloneClass>");
+	//println("Number of clone classes: <numCloneClass>");
 	println("Biggest Clone: <max> lines.");
-	println("Biggest Clone Class: <maxClass> lines.");
+	//println("Biggest Clone Class: <maxClass> lines.");
 	println("Example Clone1: <maxClone>");
-	println("Example Clone2: <biggerClass>");
+	//println("Example Clone2: <biggerClass>");
 }
