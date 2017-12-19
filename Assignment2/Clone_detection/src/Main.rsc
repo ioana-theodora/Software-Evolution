@@ -67,14 +67,14 @@ public void Main(loc project){
 			 //need the location of each subtree by using the serialized result
 			 
 			 lines = cleanLines(readFileLines(location));
-			 //aux = aux + [lines];
+			 aux = aux + [lines];
 			 
 	
 		}
 		
 		duplicatedStrs = duplicatedStrs + [countDuplicates(aux)];
 		writeOnFile(duplicatedStrs,|project://Clone_detection/src/type1clones.txt|);
-		aux = [];
+		//aux = [];
 	}
 	
 	countDupLines = 0;
