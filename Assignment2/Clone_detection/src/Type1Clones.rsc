@@ -29,7 +29,7 @@ public list[str] commentLines(list[str] lines){
 			
 			
 			else if(/^[\s\t\n]*\/\*.*$/ := l){
-				if(!(/^\/\*/ := l)){
+				if(!(/^[\s\t\n]*.*\*\// := l)){
 					result = result + l;
 					open = 1;
 				}
@@ -93,6 +93,7 @@ public list[str] countDuplicates (list[list[str]] file){
 		}
 	
 	}
+	println(string);
 	
 	list[str] equalLines = [];
 	list[str] auxEL = [];
@@ -129,6 +130,7 @@ public list[str] countDuplicates (list[list[str]] file){
 							auxEL = auxEL + string[index1 + count];
 							
 						count += 1;
+						
 					}
 					
 					if(count >= 6){
@@ -144,15 +146,21 @@ public list[str] countDuplicates (list[list[str]] file){
 					
 				}
 				
-				else
-					index1 += 6;
+				else{
+					index1 += 1;
+					
+				}
 			
 			}
 			
-			else
+			else{
 				index1 += 1;
+				index2 += 1;
+			}
 				
 			count = 0;
+			
+			
 		}
 		
 		index1 = 0;

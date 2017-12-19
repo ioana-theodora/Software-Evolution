@@ -67,11 +67,11 @@ public void Main(loc project){
 			 //need the location of each subtree by using the serialized result
 			 
 			 lines = cleanLines(readFileLines(location));
-			 aux = aux + [lines];
+			 //aux = aux + [lines];
 			 
 	
 		}
-		println("Aux: <aux>");
+		
 		duplicatedStrs = duplicatedStrs + [countDuplicates(aux)];
 		writeOnFile(duplicatedStrs,|project://Clone_detection/src/type1clones.txt|);
 		aux = [];
@@ -87,6 +87,8 @@ public void Main(loc project){
 
 	numOfClones = size(duplicatedStrs);
 	numCloneClass = 0;
+	
+	println("dups: <dups>");
 	
 	for(d <- dups, size(d) > 2)
 		numCloneClass += 1;
@@ -111,12 +113,15 @@ public void Main(loc project){
 	}
 	
 	//saves the indexes of the clone classes
-	/*list[int] cloneClasses = [indexOf(dups,x) | x <- dups, size(x) > 2];
+	list[int] cloneClasses = [indexOf(dups,x) | x <- dups, size(x) > 2];
 	
-	
+	println("cloneClasses: <cloneClasses>");
+	println("testing: <duplicatedStrs[cloneClasses[0]]>");
+	println("duplicatedStrs: <duplicatedStrs>");
 	
 	maxClass = size(duplicatedStrs[cloneClasses[0]]);
 	biggerClass = duplicatedStrs[cloneClasses[0]];
+	
 
 	for(cc <- cloneClasses){	
 		
@@ -125,15 +130,15 @@ public void Main(loc project){
 			biggerClass = duplicatedStrs[cc];
 		}
 	
-	}*/
+	}
 	
 	percentage = (countDupLines*1.0)/lOc;
 	
 	println("Duplicated Lines: <percentage>%");
 	println("Number of clones: <numOfClones>");
-	//println("Number of clone classes: <numCloneClass>");
+	println("Number of clone classes: <numCloneClass>");
 	println("Biggest Clone: <max> lines.");
-	//println("Biggest Clone Class: <maxClass> lines.");
+	println("Biggest Clone Class: <maxClass> lines.");
 	println("Example Clone1: <maxClone>");
-	//println("Example Clone2: <biggerClass>");
+	println("Example Clone2: <biggerClass>");
 }
