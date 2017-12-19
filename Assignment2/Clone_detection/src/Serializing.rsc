@@ -22,47 +22,47 @@ public str subTreeToString (Statement subTree){
 		case Statement s: {
 			if(/<nameStatement:^\w+>/ := toString(s)){
 				if(nameStatement != "expressionStatement" && nameStatement != "declarationStatement")
-					subTreeString += nameStatement + " ";
+					subTreeString += nameStatement/* + " "*/;
 				if(nameStatement == "declarationStatement")
-					subTreeString += "= ";
+					subTreeString += "=";
 			}
 		}
 		case \characterLiteral(x):
-			subTreeString += x + " ";
+			subTreeString += x/* + " "*/;
 		case \fieldAccess(_, _, x):
-			subTreeString += x + " ";
+			subTreeString += x/* + " "*/;
 		case \fieldAccess(_,x):
-			subTreeString += x + " ";
+			subTreeString += x/* + " "*/;
 		case \number(x):
-			subTreeString += x + " ";
+			subTreeString += x/* + " "*/;
 		case \stringLiteral(x):
-			subTreeString += x + " ";
+			subTreeString += x/* + " "*/;
 		case \variable(x,_):
-			subTreeString += x + " ";
+			subTreeString += x/* + " "*/;
 		case \variable(x,_,_):
-			subTreeString += x + " ";
+			subTreeString += x/* + " "*/;
 		case \infix(_,x,_):
-			subTreeString += x + " ";
+			subTreeString += x/* + " "*/;
     	case \postfix(_,x):
-    		subTreeString += x + " ";
+    		subTreeString += x/* + " "*/;
     	case \prefix(x,_):
-    		subTreeString += x + " ";
+    		subTreeString += x/* + " "*/;
     	case \markerAnnotation(x):
-    		subTreeString += x + " ";
+    		subTreeString += x/* + " "*/;
     	case \normalAnnotation(x,_):
-    		subTreeString += x + " ";
+    		subTreeString += x/* + " "*/;
     	case \memberValuePair(x,_):
-    		subTreeString += x + " ";             
+    		subTreeString += x/* + " "*/;             
     	case \singleMemberAnnotation(x,_):
-    		subTreeString += x + " ";
+    		subTreeString += x/* + " "*/;
 		case \assignment(_,x,_):
-			subTreeString += x + " ";
+			subTreeString += x/* + " "*/;
 		case \simpleName(nameVariable): 
-			subTreeString += nameVariable + " ";
+			subTreeString += nameVariable/* + " "*/;
 		case \methodCall(_,nameMethod,_):
-			subTreeString += nameMethod + "() ";
+			subTreeString += nameMethod/* + "() "*/;
 		case \methodCall(_,_,nameMethod,_):
-			subTreeString += nameMethod + "() ";
+			subTreeString += nameMethod/* + "() "*/;
 	}
 	//text(subTreeString);
 	return subTreeString;
@@ -80,8 +80,8 @@ public str serializingAST(Declaration astMethod){
 			}
 		}
 		case \method(x,y,_,_,_):{
-			subTreesList += toString(x) + " ";
-			subTreesList += y + " ";
+			subTreesList += toString(x)/* + " "*/;
+			subTreesList += y/* + " "*/;
 		}
 	}
 	for(method <-  subTreesList){

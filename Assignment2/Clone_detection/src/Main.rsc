@@ -5,6 +5,7 @@ import Type2Clones;
 import Utile;
 import Visualization;
 import Serializing;
+import SuffixTrees;
 //------------------
 import IO;
 import Set;
@@ -36,15 +37,16 @@ public void Main(loc project){
 	
 	////////////////// "REPORT" /////////////////////////////////////////////////
 
-	/*lOc = countCodeLinesProject(project.ls);
+	//lOc = countCodeLinesProject(project.ls);
 
 	//the serialized subtrees will be here
-	list[str] serializedSubTrees = [];
+	//list[str] serializedSubTrees = [];
 	//Not sure if we still this, maybe duplicates can do this right away?
-	SuffixTree suffixT = buildST(serializedSubTrees);
+	SuffixTree suffixT = buildST(serilizationsFromMethodsASTS);
 	//each list[int] of dups is the indexes from serializedSubTrees that have
 	//duplicated code fragments
 	list[list[int]] dups = duplicates(suffixT);
+	println(dups);
 	//each list[str] is the duplicated lines of code for each group of dups
 	list[list[str]] duplicatedStrs = [];
 	//this will help after
@@ -55,7 +57,7 @@ public void Main(loc project){
 		for(ds <- d){
 			//goes to each subtree that have duplicated code, get location, 
 			//get lines of code (list[str])
-			 location = serializedSubTrees[ds]; //need the location of each subtree
+			 location = locationAndSerialization[serilizationsFromMethodsASTS[ds]]; //need the location of each subtree
 			 									//by using the serialized result
 			 lines = cleanLines(readFileLines(location));
 			 aux = aux + [lines];
@@ -118,5 +120,5 @@ public void Main(loc project){
 	println("Biggest Clone: <max> lines.");
 	println("Biggest Clone Class: <maxClass> lines.");
 	println("Example Clone1: <maxClone>");
-	println("Example Clone2: <biggerClass>");*/
+	println("Example Clone2: <biggerClass>");
 }
