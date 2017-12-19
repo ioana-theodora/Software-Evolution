@@ -22,7 +22,7 @@ import util::ValueUI;
 public void Main(loc project){
 	astsFromProject = getAstsFromProject(project);
 	//text(astsFromProject);
-	//text(visualizationClonesFiles(astsFromProject));
+	
 	methodsFromAsts = getMethodsfromAsts(astsFromProject);
 	//text(methodsFromAsts);
 	
@@ -141,4 +141,7 @@ public void Main(loc project){
 	println("Biggest Clone Class: <maxClass> lines.");
 	println("Example Clone1: <maxClone>");
 	println("Example Clone2: <biggerClass>");
+	
+	visualizationClonesFiles(astsFromProject);
+	
 }
